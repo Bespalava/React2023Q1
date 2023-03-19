@@ -46,7 +46,7 @@ describe('Error page', () => {
 
 describe('Local storage', () => {
   let input: HTMLInputElement;
-  const key = 'webdev163-search-query';
+  const key = 'Bespalava-search-query';
   const value = 'Test query';
 
   beforeEach(() => {
