@@ -1,0 +1,14 @@
+import React, { Component } from 'react';
+
+import styles from './AboutPage.module.scss';
+
+export default class AboutPage extends Component {
+  render() {
+    return (
+      <div className={styles.wrapper} data-testid="about-page">
+        <h1 className={styles.title}>О нас</h1>
+        <p>Компания с самой лучшей пиццей на свете!</p>
+      </div>
+    );
+  }
+}
