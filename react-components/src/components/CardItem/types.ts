@@ -1,3 +1,6 @@
-import { CardData } from '../../utils/types';
+import { GuardianResponseItem, ModalData } from '../../utils/types';
 
-export type { CardData as CardItemProps };
+export interface CardItemProps {
+  data: GuardianResponseItem;
+  toggleModal: (newModalData: ModalData) => void;
+}
