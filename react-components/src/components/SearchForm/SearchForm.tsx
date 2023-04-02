@@ -1,38 +1,43 @@
-import React, { Component } from 'react';
-import { SearchFormState } from './types';
+import React, { FC, useEffect, useState } from 'react';
+import { SearchFormProps } from './types';
 
 import styles from './SearchForm.module.scss';
 
-export default class SearchForm extends Component<Record<string, never>, SearchFormState> {
-  state: SearchFormState = {
-    value: '',
+const SearchForm: FC<SearchFormProps> = ({ setQuery }) => {
+  const [formValue, setFormValue] = useState<string>('');
+
+  useEffect(() => {
+    const prevValue = localStorage.getItem('Bespalava-search-query') || '';
+    setQuery(prevValue);
+    setFormValue(prevValue);
+  }, [setQuery]);
+
+  const updateFormValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target;
+    target && setFormValue(target.value);
   };
 
-  componentDidMount() {
-    this.setState({ value: localStorage.getItem('Bespalava-search-query') || '' });
-  }
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setQuery(formValue);
+    localStorage.setItem('Bespalava-search-query', formValue);
+  };
 
-  componentWillUnmount() {
-    localStorage.setItem('Bespalava-search-query', this.state.value);
-  }
+  return (
+    <form className={styles.form} onSubmit={(e: React.FormEvent) => onSubmit(e)}>
+      <input
+        name="search"
+        type="text"
+        placeholder="Поиск"
+        className={styles.input}
+        value={formValue}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateFormValue(e)}
+      />
+      <button type="submit" className={styles.button}>
+        Find
+      </button>
+    </form>
+  );
+};
 
-  handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
-    const target = e.target;
-    target && this.setState({ value: target.value });
-  }
-
-  render() {
-    return (
-      <form action="" className={styles.form}>
-        <input
-          name="search"
-          type="text"
-          placeholder="Поиск"
-          className={styles.input}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.handleSearch(e)}
-          value={this.state.value}
-        />
-      </form>
-    );
-  }
-}
+export default SearchForm;
