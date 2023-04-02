@@ -1,36 +1,31 @@
-import React, { Component } from 'react';
-import { TimeCheckboxProps } from './types';
-import { FormFieldTypes } from '../../../utils/types';
+import React from 'react';
+import { FormDataValues } from '../../../utils/types';
+import { useController, UseControllerProps } from 'react-hook-form';
 
 import styles from './TimeCheckbox.module.scss';
 
-export default class TimeCheckbox extends Component<TimeCheckboxProps, Record<string, never>> {
-  render() {
-    const { forwardRef } = this.props;
-    return (
-      <label className="label">
-        <span className="label-text">Время доставки:</span>
-        <div className={styles.slide}>
-          <label className="label-checkbox" htmlFor="checkbox-call">
-            дневное
-          </label>
-          <input
-            className="slide-checkbox"
-            type="checkbox"
-            name={FormFieldTypes.TIME}
-            id="checkbox-call"
-            ref={forwardRef}
-          />
-          <label
-            className="custom-checkbox"
-            htmlFor="checkbox-call"
-            data-testid="custom-checkbox"
-          ></label>
-          <label className="label-checkbox" htmlFor="checkbox-call">
-            вечернее
-          </label>
-        </div>
-      </label>
-    );
-  }
-}
+const TimeCheckbox = (props: UseControllerProps<FormDataValues, 'time'>) => {
+  const { field } = useController(props);
+
+  return (
+    <label className="label">
+      <span className="label-text">Время доставки:</span>
+      <div className={styles.slide}>
+        <label className="label-checkbox" htmlFor="checkbox-call">
+          дневное
+        </label>
+        <input className="slide-checkbox" type="checkbox" id="checkbox-call" {...field} />
+        <label
+          className="custom-checkbox"
+          htmlFor="checkbox-call"
+          data-testid="custom-checkbox"
+        ></label>
+        <label className="label-checkbox" htmlFor="checkbox-call">
+          вечернее
+        </label>
+      </div>
+    </label>
+  );
+};
+
+export default TimeCheckbox;
