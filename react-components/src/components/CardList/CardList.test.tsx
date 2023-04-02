@@ -1,11 +1,13 @@
 import { render, screen, within } from '@testing-library/react';
 import CardList from './CardList';
-import data from '../../assets/data/db.json';
+import { mockGuardianResponse } from '../../tests/mockGuardianResponse';
 
-describe('Card list', () => {
+describe('Card item', () => {
   let list: HTMLElement;
+  const testData = mockGuardianResponse().response.results;
+  const mock = jest.fn();
   beforeEach(() => {
-    render(<CardList />);
+    render(<CardList dataArr={testData} toggleModal={mock} />);
     list = screen.getByTestId('card-list');
   });
 
@@ -16,6 +18,6 @@ describe('Card list', () => {
   it('should render correct number of items', () => {
     const { getAllByRole } = within(list);
     const items = getAllByRole('listitem');
-    expect(items.length).toBe(data.length);
+    expect(items.length).toBe(testData.length);
   });
 });
