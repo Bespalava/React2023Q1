@@ -1,18 +1,8 @@
-import React, { Component } from 'react';
-import SearchForm from '../../components/SearchForm';
-import CardList from '../../components/CardList';
+import React, { FC } from 'react';
+import SearchMain from '../../components/SearchMain';
 
-import styles from './MainPage.module.scss';
+const MainPage: FC = () => {
+  return <SearchMain />;
+};
 
-export default class MainPage extends Component {
-  render() {
-    return (
-      <div data-testid="main-page">
-        <div className={styles.formWrapper}>
-          <SearchForm />
-        </div>
-        <CardList />
-      </div>
-    );
-  }
-}
+export default MainPage;
