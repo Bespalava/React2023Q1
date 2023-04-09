@@ -1,43 +1,48 @@
-import React, { FC, useEffect, useState } from 'react';
-import { SearchFormProps } from './types';
+import React, { Component } from 'react';
+import { SearchFormProps, SearchFormState } from './types';
 
 import styles from './SearchForm.module.scss';
 
-const SearchForm: FC<SearchFormProps> = ({ setQuery }) => {
-  const [formValue, setFormValue] = useState<string>('');
+export default class SearchForm extends Component<SearchFormProps, SearchFormState> {
+  constructor(props: SearchFormProps) {
+    super(props);
+    this.state = {
+      formValue: '',
+    };
+  }
 
-  useEffect(() => {
-    const prevValue = localStorage.getItem('Bespalava-search-query') || '';
-    setQuery(prevValue);
-    setFormValue(prevValue);
-  }, [setQuery]);
+  componentDidMount() {
+    const prevValue = localStorage.getItem('webdev163-search-query') || '';
+    this.props.setQuery(prevValue);
+    this.setState({ formValue: prevValue });
+  }
 
-  const updateFormValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setFormValue(e: React.ChangeEvent<HTMLInputElement>) {
     const target = e.target;
-    target && setFormValue(target.value);
-  };
+    target && this.setState({ formValue: target.value });
+  }
 
-  const onSubmit = (e: React.FormEvent) => {
+  onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setQuery(formValue);
-    localStorage.setItem('Bespalava-search-query', formValue);
-  };
+    this.props.setQuery(this.state.formValue);
+    localStorage.setItem('webdev163-search-query', this.state.formValue);
+  }
 
-  return (
-    <form className={styles.form} onSubmit={(e: React.FormEvent) => onSubmit(e)}>
-      <input
-        name="search"
-        type="text"
-        placeholder="Поиск"
-        className={styles.input}
-        value={formValue}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateFormValue(e)}
-      />
-      <button type="submit" className={styles.button}>
-        Find
-      </button>
-    </form>
-  );
-};
-
-export default SearchForm;
+  render() {
+    return (
+      <form className={styles.form} onSubmit={(e: React.FormEvent) => this.onSubmit(e)}>
+        <input
+          name="search"
+          type="text"
+          placeholder="Поиск"
+          className={styles.input}
+          value={this.state.formValue}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.setFormValue(e)}
+        />
+        <button type="submit" className={styles.button}>
+          Find
+        </button>
+      </form>
+    );
+  }
+}
