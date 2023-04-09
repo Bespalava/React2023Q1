@@ -48,11 +48,9 @@ describe('Main page search functionality', () => {
     });
     userEvent.click(button);
     await waitForElementToBeRemoved(() => screen.getByTestId('loader'));
-    await waitFor(() => {
-      expect(
-        screen.getByText(mockedResponse.response.results[0].fields.headline)
-      ).toBeInTheDocument();
-    });
+    expect(
+      screen.getByText(mockedResponse.response.results[0].fields.headline)
+    ).toBeInTheDocument();
   });
 
   it('should open and close modal window, render modal data', async () => {
@@ -64,8 +62,7 @@ describe('Main page search functionality', () => {
       name: /find/i,
     });
     userEvent.click(button);
-    const loader = await screen.findByTestId('loader');
-    await waitForElementToBeRemoved(loader);
+    await waitForElementToBeRemoved(() => screen.getByTestId('loader'));
     const card = screen.getAllByRole('listitem')[0];
     userEvent.click(card);
 
