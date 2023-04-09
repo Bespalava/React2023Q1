@@ -1,25 +1,24 @@
-import React, { FC } from 'react';
+import React, { Component } from 'react';
 import { FormModalProps } from './types';
 
 import styles from './FormModal.module.scss';
 
-const FormModal: FC<FormModalProps> = ({ isActive, toggleModalActive }) => {
-  const generateModal = () => {
+export default class FormModal extends Component<FormModalProps, Record<string, never>> {
+  generateModal() {
     return (
       <div className={styles.wrapper}>
         <div className={styles.inner}>
           <p>Заказ успешно создан!</p>
           <div className={styles.btnWrapper}>
-            <button className={styles.button} onClick={toggleModalActive}>
+            <button className={styles.button} onClick={this.props.toggleModalActive}>
               OK
             </button>
           </div>
         </div>
       </div>
     );
-  };
-
-  return isActive ? generateModal() : null;
-};
-
-export default FormModal;
+  }
+  render() {
+    return this.props.isActive ? this.generateModal() : '';
+  }
+}
