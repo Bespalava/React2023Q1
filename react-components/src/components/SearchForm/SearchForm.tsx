@@ -12,7 +12,7 @@ export default class SearchForm extends Component<SearchFormProps, SearchFormSta
   }
 
   componentDidMount() {
-    const prevValue = localStorage.getItem('webdev163-search-query') || '';
+    const prevValue = localStorage.getItem('Bespalava-search-query') || '';
     this.props.setQuery(prevValue);
     this.setState({ formValue: prevValue });
   }
@@ -25,7 +25,7 @@ export default class SearchForm extends Component<SearchFormProps, SearchFormSta
   onSubmit(e: React.FormEvent) {
     e.preventDefault();
     this.props.setQuery(this.state.formValue);
-    localStorage.setItem('webdev163-search-query', this.state.formValue);
+    localStorage.setItem('Bespalava-search-query', this.state.formValue);
   }
 
   render() {
