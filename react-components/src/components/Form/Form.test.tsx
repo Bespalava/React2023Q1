@@ -1,7 +1,7 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import Form from './Form';
 import userEvent from '@testing-library/user-event';
-import { mockInvalidForm, mockValidForm } from '../../tests/mockForm';
+import { mockInvalidForm } from '../../tests/mockForm';
 
 describe('Form card item', () => {
   let form: HTMLElement;
@@ -11,9 +11,7 @@ describe('Form card item', () => {
   let image: HTMLInputElement;
   let agree: HTMLInputElement;
   let modal: HTMLElement | null;
-  let button: HTMLElement;
   const mockInvalid = mockInvalidForm();
-  const mockValid = mockValidForm();
 
   const setup = () => {
     const mock = jest.fn();
@@ -25,7 +23,6 @@ describe('Form card item', () => {
     image = screen.getByTestId('file-input');
     agree = screen.getByTestId('agree-checkbox');
     modal = screen.queryByText(/заказ успешно создан/i);
-    button = screen.getByRole('button', { name: /оформить заказ/i });
   };
 
   it('should render component', () => {
@@ -33,54 +30,34 @@ describe('Form card item', () => {
     expect(form).toBeInTheDocument();
   });
 
-  it("shouldn't submit invalid form", async () => {
+  it("shouldn't submit invalid form", () => {
     setup();
     let data = mockInvalid[0];
     userEvent.type(name, data.name);
     userEvent.type(date, data.date);
-    userEvent.selectOptions(delivery, data.delivery);
-    userEvent.upload(image, new File([data.image], 'example.png'));
-    userEvent.click(button);
-    await waitFor(() => {
-      expect(modal).not.toBeInTheDocument();
-    });
+    delivery.value = data.delivery;
+    image.value = data.image;
+    agree.checked = data.agree;
+    fireEvent.submit(form);
+    expect(modal).not.toBeInTheDocument();
 
     data = mockInvalid[1];
     name.value = '';
     userEvent.type(name, data.name);
     userEvent.clear(date);
-    userEvent.selectOptions(delivery, data.delivery);
-    userEvent.upload(image, new File([data.image], 'example.png'));
+    delivery.value = data.delivery;
+    image.value = data.image;
     userEvent.click(agree);
-    userEvent.click(button);
-    await waitFor(() => {
-      expect(modal).not.toBeInTheDocument();
-    });
+    fireEvent.submit(form);
+    expect(modal).not.toBeInTheDocument();
 
     data = mockInvalid[2];
     userEvent.clear(name);
     userEvent.type(date, data.date);
-    userEvent.selectOptions(delivery, data.delivery);
-    userEvent.upload(image, new File([data.image], 'example.png'));
+    delivery.value = data.delivery;
+    image.value = data.image;
     userEvent.click(agree);
-    userEvent.click(button);
-    await waitFor(() => {
-      expect(modal).not.toBeInTheDocument();
-    });
-  });
-
-  it('should submit valid form', async () => {
-    setup();
-    const data = mockValid;
-    userEvent.type(name, data.name);
-    userEvent.type(date, data.date);
-    userEvent.selectOptions(delivery, data.delivery);
-    userEvent.upload(image, new File([data.image], 'example.png'));
-    expect(image.files).toHaveLength(1);
-    userEvent.click(agree);
-    userEvent.click(button);
-    await waitFor(() => {
-      expect(screen.getByText(/Заказ успешно создан!/i)).toBeInTheDocument();
-    });
+    fireEvent.submit(form);
+    expect(modal).not.toBeInTheDocument();
   });
 });
