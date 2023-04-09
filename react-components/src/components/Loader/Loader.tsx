@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { Component } from 'react';
 import loader from '../../assets/icons/loader.svg';
 
 import styles from './Loader.module.scss';
